@@ -1,0 +1,29 @@
+{
+    "meta" : {
+        "label": "Token accounts",
+        "description": "",
+        "icon": "icon-time"
+    },
+    "defaultDefinableInline": true,
+    "defaultDefinableAtProjectLevel": true,
+    "pluginParams": [
+    ],
+
+    "params": [
+        {
+            "name": "server_url",
+            "label": "Server URL",
+            "type": "STRING"
+        },
+        {
+            "name": "ssl_check_disabled",
+            "label": "Disabling ",
+            "type": "BOOLEAN"
+        },
+        {
+            "name": "token",
+            "label": "API Token",
+            "type": "PASSWORD"
+        }
+    ]
+}

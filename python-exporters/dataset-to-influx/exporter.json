@@ -1,0 +1,125 @@
+{
+    "meta" : {
+        "label": "Influx DB",
+        "description": "Export dataset to Influx DB",
+        "icon": "icon-time"
+    },
+    "exportBehavior": "MANAGES_OUTPUT",
+    "exportOptions": [
+        {
+            "label": "export to Influx DB"
+        }
+    ],
+    "kind": "PYTHON",
+    "paramsPythonSetup": "browse_influx.py",
+
+    "params": [
+        {
+            "name": "preset_type",
+            "label": "Account type",
+            "type": "SELECT",
+            "selectChoices": [
+                {"value": "token_preset", "label": "Token account"},
+                {"value": "user_preset", "label": "Personnal account"},
+                {"value": "service_preset", "label": "Service account"}
+            ],
+            "defaultValue": "token_preset",
+            "visibilityCondition": false
+        },
+        {
+            "name": "user_preset",
+            "label": "User preset",
+            "type": "PRESET",
+            "parameterSetId": "user-accounts",
+            "visibilityCondition": "model.preset_type=='user_preset'"
+        },
+        {
+            "name": "service_preset",
+            "label": "Service account preset",
+            "type": "PRESET",
+            "parameterSetId": "service-accounts",
+            "visibilityCondition": "model.preset_type=='service_preset'"
+        },
+        {
+            "name": "token_preset",
+            "label": "Token preset",
+            "type": "PRESET",
+            "parameterSetId": "token-accounts",
+            "visibilityCondition": "model.preset_type=='token_preset'"
+        },
+        {
+            "name": "orgs",
+            "label": "Organization selection",
+            "type": "SELECT",
+            "visibilityCondition": "(model.preset_type=='token_preset' && model.token_preset.mode != 'NONE') || (model.preset_type=='service_preset' && model.service_preset.mode != 'NONE') || (model.preset_type=='user_preset' && model.user_preset.mode != 'NONE')",
+            "getChoicesFromPython": true
+        },
+        {
+            "name": "bucket",
+            "label": "Bucket selection",
+            "type": "SELECT",
+            "visibilityCondition": "model.orgs.mode != 'NONE'",
+            "getChoicesFromPython": true
+        },
+        {
+            "name": "new_bucket_name",
+            "label": "New bucket name",
+            "type": "STRING",
+            "visibilityCondition": "model.bucket=='new_bucket'"
+        },
+        {
+            "name": "input_dataset",
+            "type": "DATASET",
+            "label": "Dataset to export"
+        },
+        {
+            "name": "measurement_column",
+            "label": "Measurement columns",
+            "type":"DATASET_COLUMN",
+            "datasetParamName": "input_dataset"
+        },
+        {
+            "name": "tag_columns",
+            "label": "Tag columns",
+            "type":"DATASET_COLUMNS",
+            "datasetParamName": "input_dataset"
+        },
+        {
+            "name": "field_columns",
+            "label": "Field key -> value columns",
+            "type":"KEY_VALUE_LIST",
+            "visibilityCondition": false
+        },
+        {
+            "name": "field_value_separator",
+            "label": "Field -> Value",
+            "type": "SEPARATOR",
+            "description": "Field key and value need to be a 1 to 1 match"
+        },
+        {
+            "name": "field_key_columns",
+            "label": "Field key columns",
+            "type":"DATASET_COLUMNS",
+            "datasetParamName": "input_dataset"
+        },
+        {
+            "name": "warning_field_length_mismatch",
+            "label": "",
+            "type": "SEPARATOR",
+            "description": "⚠️ Field key and value are not a 1 to 1 match",
+            "visibilityCondition": "model.field_key_columns.length != model.field_value_columns.length"
+        },
+        {
+            "name": "field_value_columns",
+            "label": "Value columns",
+            "type":"DATASET_COLUMNS",
+            "datasetParamName": "input_dataset"
+        },
+        {
+            "name": "time_column",
+            "label": "Time column",
+            "type":"DATASET_COLUMN",
+            "datasetParamName": "input_dataset"
+        }
+    ]
+}

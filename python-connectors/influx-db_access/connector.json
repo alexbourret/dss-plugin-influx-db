@@ -1,0 +1,58 @@
+{
+    "meta" : {
+        "label": "Influx DB access",
+        "description": "Query data from your Influx DB buckets",
+        "icon": "icon-time"
+    },
+    "readable": true,
+    "writable": false,
+    "kind": "PYTHON",
+    "paramsPythonSetup": "browse_influx.py",
+    "params": [
+        {
+            "name": "preset_type",
+            "label": "Account type",
+            "type": "SELECT",
+            "selectChoices": [
+                {"value": "token_preset", "label": "Token account"},
+                {"value": "user_preset", "label": "Personnal account"},
+                {"value": "service_preset", "label": "Service account"}
+            ],
+            "defaultValue": "token_preset",
+            "visibilityCondition": false
+        },
+        {
+            "name": "user_preset",
+            "label": "User preset",
+            "type": "PRESET",
+            "parameterSetId": "user-accounts",
+            "visibilityCondition": "model.preset_type=='user_preset'"
+        },
+        {
+            "name": "service_preset",
+            "label": "Service account preset",
+            "type": "PRESET",
+            "parameterSetId": "service-accounts",
+            "visibilityCondition": "model.preset_type=='service_preset'"
+        },
+        {
+            "name": "token_preset",
+            "label": "Token preset",
+            "type": "PRESET",
+            "parameterSetId": "token-accounts",
+            "visibilityCondition": "model.preset_type=='token_preset'"
+        },
+        {
+            "name": "orgs",
+            "label": "Organization selection",
+            "type": "SELECT",
+            "visibilityCondition": "(model.preset_type=='token_preset' && model.token_preset.mode != 'NONE') || (model.preset_type=='service_preset' && model.service_preset.mode != 'NONE') || (model.preset_type=='user_preset' && model.user_preset.mode != 'NONE')",
+            "getChoicesFromPython": true
+        },
+        {
+            "name": "sql_query",
+            "label": "Query",
+            "type": "TEXTAREA"
+        }
+    ]
+}
